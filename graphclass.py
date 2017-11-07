@@ -1,4 +1,5 @@
 import networkx as ng
+import matplotlib.pyplot as plt
 
 class Graph:
     """Graph data structure : dict={node : [out],[in],attribute}"""
@@ -8,7 +9,7 @@ class Graph:
             self.graph=dict()
             self.graph={}
     def add_vertex(self,vertex):
-    """Adds vertex to graph dict if not added"""
+        """Adds vertex to graph dict if not added"""
         if vertex not in self.graph.keys():
             self.graph[vertex]=[[None],[None]]
             self.vertices=self.vertices+1
@@ -16,6 +17,7 @@ class Graph:
     def add_edge(self,edgeset=[]):
         """edgeset = [u,v,weight], populates in and out accordingly"""
         self.edgeset=list(edgeset)
+        #print self.edgeset[0]
         self.fanout=self.edgeset[1]
         self.fanin=self.edgeset[0]
         
@@ -66,22 +68,71 @@ class Graph:
             return (self.graph[vertex][1])
     
     
-g1=Graph(2)
+    def draw(self):
+        dg=ng.DiGraph()
+        #self.pair=[]
+        #self.edgepair=[]
+        for i in self.graph.keys():
+            pair =self.graph[i][0]
+            print pair
+            if pair!=[None]:
+                for k in range(0,len(pair)):
+                    dg.add_edge(i,pair[k])   
+                
+        ng.draw(dg,with_labels=True,edge_labels=True,arrows=True)
+        plt.show()
 
-print g1.vertices
-
-for i in range(1,6):
-    g1.add_vertex(i)
+##toposort#
+if __name__== '__main__':
     
-g1.add_edge([1,3])
-g1.add_edge([2,3])
-g1.add_edge([3,4])
-g1.add_edge([3,5])
-g1.add_edge([4,5])
+  g1=Graph(2)
 
-print g1.graph
-print g1.num_vertices()
-print g1.get_vertices()
-print g1.get_in_degrees()
-print g1.get_outneigbours(3)
+  print g1.vertices
 
+  for i in range(1,6):
+      g1.add_vertex(i)
+      
+  g1.add_edge([1,2])
+  g1.add_edge([3,2])
+  g1.add_edge([4,2])
+  g1.add_edge([4,5])
+  g1.add_edge([2,5])
+  g1.draw()
+
+
+
+  dynamic_in_degrees=[]
+  dynamic_in_degrees=g1.get_in_degrees()
+
+  print dynamic_in_degrees
+
+  nextup=[]
+  next_up=[i for i in range(0,len(dynamic_in_degrees)) if dynamic_in_degrees[i]==0]
+
+  print next_up
+                            
+  out_order=[]
+  out=[]
+
+  while (len(next_up)!=0):
+      out_order.append(next_up[0]+1)
+      out=g1.get_outneigbours(next_up[0]+1)
+      if out==[None]:
+          break
+      print "out",out
+      del(next_up[0])
+      print "next_up",next_up
+      for i in out:
+          dynamic_in_degrees[i-1]=dynamic_in_degrees[i-1]-1
+          #print "dynamic_in_degrees", dynamic_in_degrees
+          if dynamic_in_degrees[i-1]==0:
+              next_up.append(i-1)
+              print next_up
+      
+  print out_order
+
+      
+
+
+
+    
