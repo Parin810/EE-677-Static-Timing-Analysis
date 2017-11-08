@@ -1,5 +1,10 @@
 import networkx as ng
 import matplotlib.pyplot as plt
+from networkx.drawing.nx_pydot import write_dot
+
+
+import networkx as ng
+import matplotlib.pyplot as plt
 
 class Graph:
     """Graph data structure : dict={node : [out],[in],attribute}"""
@@ -23,9 +28,12 @@ class Graph:
         
         print self.fanin,self.fanout
         
+        
+        if len(self.edgeset)==3:
+            self.graph[self.edgeset[0]].append(self.edgeset[2])
+        
         if self.graph[self.edgeset[0]][0]==[None]:
             self.graph[self.edgeset[0]][0].remove(None)
-        
         self.graph[self.edgeset[0]][0].append(self.fanout)
         
         if self.graph[self.edgeset[1]][1]==[None]:
@@ -68,6 +76,19 @@ class Graph:
             return (self.graph[vertex][1])
     
     
+    def get_weight(self,u,v):
+        """Returns the edge weight from u to v"""
+        if u not in self.graph.keys():
+            return None
+        if v not in self.graph.keys():
+            return None
+        try:
+            index = self.graph[u][0].index(v)
+            return (self.graph[u][index+2])
+        except:
+            return None
+        
+    
     def draw(self):
         dg=ng.DiGraph()
         #self.pair=[]
@@ -77,7 +98,7 @@ class Graph:
             print pair
             if pair!=[None]:
                 for k in range(0,len(pair)):
-                    dg.add_edge(i,pair[k])   
+                    dg.add_edge(i,pair[k])
                 
         ng.draw(dg,with_labels=True,edge_labels=True,arrows=True)
         plt.show()
