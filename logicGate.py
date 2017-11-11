@@ -100,6 +100,40 @@ class OrGate(BinaryGate):
         else:
             return 0
 
+class XOrGate(BinaryGate):
+    def __init__(self,n,in1=None,in2=None):
+        BinaryGate.__init__(self,n,in1,in2)
+    def performGateLogic(self):
+        a = self.getPinA()
+        b = self.getPinB()
+        if a ==0:
+         if b==0:
+            return 0
+         else:
+             return 1
+        else:
+         if b==0:
+             return 1
+         else:
+            return 0
+
+class XNOrGate(BinaryGate):
+    def __init__(self,n,in1=None,in2=None):
+        BinaryGate.__init__(self,n,in1,in2)
+    def performGateLogic(self):
+        a = self.getPinA()
+        b = self.getPinB()
+        if a ==0:
+         if b==0:
+            return 1
+         else:
+             return 0
+        else:
+         if b==0:
+             return 0
+         else:
+            return 1
+
 class NotGate(UnaryGate):
     def __init__(self,n):
         UnaryGate.__init__(self,n)
@@ -155,7 +189,7 @@ class Connector:
     def getFrom(self):
         return self.fromgate
 
-    def getTo(self):
+   def getTo(self):
         return self.togate
 
 
@@ -167,7 +201,7 @@ if __name__ == '__main__':
         w2 = Source("w2",input_value[i][1])
         w3 = Sink("sink")
 
-        g1 = AndGate("andGate1")
+        g1 = XNOrGate("andGate1")
     
         c1 = Connector(w1,g1)
         c2 = Connector(w2,g1)
