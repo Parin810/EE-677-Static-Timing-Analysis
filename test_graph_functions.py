@@ -49,6 +49,24 @@ def generate_ats(g1,toposort_list):
     return ats
 
 
+def generate_rats(g1,reverse_toposort_list,cycle_time):
+    nodes = reverse_toposort_list
+    print nodes
+    #set max values for all rats
+    rats = [100]*g1.num_vertices()
+    for i in range(0,len(nodes)):
+        fanout=g1.get_outneigbours(nodes[i])
+        rat = 100
+        #if no fanout, rat= cycle time
+        if any(fanout)==False:
+            #print nodes[i]
+            rats[nodes[i]-1]=cycle_time
+            continue
+        for k in fanout:
+            rat = min(rat,rats[k-1] - g1.get_weight(nodes[i],k))
+            print nodes[i],k,rat
+        rats[nodes[i]-1] = round(rat,2)
+    return rats
 
 
 g1=g.Graph(2)
@@ -70,3 +88,5 @@ print g1.graph
 print toposort(g1)
 print generate_ats(g1,toposort(g1))
 
+reverse_toposort_list= list(toposort(g1))[::-1]
+print generate_rats(g1,reverse_toposort_list,10)
