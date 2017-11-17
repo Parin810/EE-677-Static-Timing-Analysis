@@ -95,7 +95,7 @@ class Graph:
         #self.edgepair=[]
         for i in self.graph.keys():
             pair =self.graph[i][0]
-            print pair
+            #print pair
             if pair!=[None]:
                 for k in range(0,len(pair)):
                     dg.add_edge(i,pair[k])

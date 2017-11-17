@@ -33,7 +33,7 @@ def generate_ats(g1,toposort_list):
     """Returns a node indexed ats list,
     index+1=nodenumber"""
     nodes = toposort_list
-    print nodes
+    #print nodes
     ats = [0]*g1.num_vertices()
 
     for i in range(0,len(nodes)):
@@ -41,15 +41,19 @@ def generate_ats(g1,toposort_list):
         mat =0
         if any(fanin)==False:
             ats[nodes[i]-1]=0
+            g1.graph[nodes[i]].append(mat)
             continue
         for k in fanin:
             #print "w",g1.get_weight(k,nodes[i])
-            mat = max(mat, ats[k-1]+g1.get_weight(k,nodes[i]))
+            mat = max(mat, ats[k-1]+g1.get_weight(k,nodes[i]))  
         ats[nodes[i]-1]=mat
+        g1.graph[nodes[i]].append(mat)
     return ats
 
 
-def generate_rats(g1,reverse_toposort_list,cycle_time):
+def generate_rats_slack(g1,reverse_toposort_list,cycle_time):
+    """ Returns rats along with updating slack
+    and rats in main graph"""
     nodes = reverse_toposort_list
     print nodes
     #set max values for all rats
@@ -61,32 +65,44 @@ def generate_rats(g1,reverse_toposort_list,cycle_time):
         if any(fanout)==False:
             #print nodes[i]
             rats[nodes[i]-1]=cycle_time
+            g1.graph[nodes[i]].append(cycle_time)
             continue
         for k in fanout:
             rat = min(rat,rats[k-1] - g1.get_weight(nodes[i],k))
-            print nodes[i],k,rat
+            #print nodes[i],k,rat
         rats[nodes[i]-1] = round(rat,2)
+        g1.graph[nodes[i]].append(rats[nodes[i]-1])
+        #compute slack = at - rat at each node 
+        slack = g1.graph[nodes[i]][-1] - g1.graph[nodes[i]][-2]
+        g1.graph[nodes[i]].append(slack)
+        
     return rats
 
+g1 = g.Graph(6)
 
-g1=g.Graph(2)
 
-print g1.vertices
-
-for i in range(1,6):
+## graph is from example explained at :https://www.youtube.com/watch?v=d9tonQ0CAI4&t=583s
+for i in range(1,7):
     g1.add_vertex(i)
+    
+g1.add_edge([1,2,3])
+g1.add_edge([3,5,9])
+g1.add_edge([4,6,6])
+g1.add_edge([2,5,11])
+g1.add_edge([5,6,15])
+g1.add_edge([2,4,5])
+g1.add_edge([1,3,4])
 
-g1.add_edge([1,2,0.5])
-g1.add_edge([3,2,1])
-g1.add_edge([4,5,2])
-g1.add_edge([4,2,3])
-g1.add_edge([2,5,0.3])
-print g1.graph
-g1.draw()
 
-print g1.graph
-print toposort(g1)
-print generate_ats(g1,toposort(g1))
 
 reverse_toposort_list= list(toposort(g1))[::-1]
-print generate_rats(g1,reverse_toposort_list,10)
+
+## finding out AATs at each node
+print generate_ats(g1,toposort(g1))
+
+## finding out rats + slack at each node
+print generate_rats_slack(g1,reverse_toposort_list,29)
+
+print g1.graph
+
+g1.draw()
