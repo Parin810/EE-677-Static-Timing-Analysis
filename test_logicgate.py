@@ -82,9 +82,39 @@ def check_nor():
         print "{} {} - {}".format(input_value[i][0], input_value[i][1], w3.getGateOutput())
     print "Done-----------------"
 
+
+def check_graph_plot():
+
+    w1 = lg.Source("w1",(0,1))
+    w2 = lg.Source("w2",(0,-1))
+    w3 = lg.Sink("sink",(3,0))
+
+    g1 = lg.AndGate("and1",(1,0))
+    g2 = lg.AndGate("or1",(2,0))
+    
+    c1 = lg.Connector(w1,g1)
+    c2 = lg.Connector(w2,g1)
+    c3 = lg.Connector(g1,g2) 
+    c4 = lg.Connector(w2,g2) 
+    c5 = lg.Connector(g2,w3) 
+          
+    # print "{} {} - {}".format(input_value[i][0], input_value[i][1], w3.getGateOutput())
+
+    print "Done-----------------"
+
+    lg.draw_graph()
+    vertex,edge = lg.get_edge_vertex()
+
+    print "vertex ----"
+    print vertex
+    print "edge ----"
+    print edge
+
 if __name__ == '__main__':
-    check_and()
-    check_or()
-    check_not()
-    check_nand()
-    check_nor()
+    # check_and()
+    # check_or()
+    # check_not()
+    # check_nand()
+    # check_nor()
+
+    check_graph_plot()
