@@ -35,7 +35,8 @@ nodes=[0,1,2,3,4,5,6,7,8,9]
 Vertices=[(0, 1),(0, 4),(1, 2),(1, 9),(2, 3),(3, 7),(4, 5),(5, 6),(6, 0),(7, 8),(7, 6),(7, 9),(8, 9),(9, 4)]
 g = Graph(len(nodes))
 Verts=len(Vertices)
-src = 2 
+src = 2
+
 dest = 4
 print Vertices
 print "Total Vertes are = ",Verts
