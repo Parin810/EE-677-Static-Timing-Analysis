@@ -1,3 +1,19 @@
+'''
+Author: Saurav Shandilya, Parin Chheda, Piyush Manavar
+Date: 06/07/2017
+Credits: EE-677 source material, Ch-1.13.2. Inheritance: Logic Gates and Circuits on http://interactivepython.org and http://www.geeksforgeeks.org
+
+Name: Implementation of basic Logic gates, source, sink and connectors
+
+Description: 
+- Input to logic gate is provided using source block. One source block per input.
+- Source is connected to gate using connectors
+- Output of logic gate is taken at sink block via connector. One putput per source block.
+
+'''
+
+
+
 from collections import defaultdict
 global path_list
 path_list=[]
