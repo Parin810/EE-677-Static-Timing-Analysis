@@ -85,31 +85,41 @@ def check_nor():
 
 def check_graph_plot():
 
-    w1 = lg.Source("w1",(0,1))
-    w2 = lg.Source("w2",(0,-1))
-    w3 = lg.Sink("sink",(3,0))
+    w1 = lg.Source("w1",pos=(0.5,0.1))
+    w2 = lg.Source("w2",pos=(0.5,-0.1))
+    w3 = lg.Source("w3",pos=(1.5,-0.1))
 
-    g1 = lg.AndGate("and1",(1,0))
-    g2 = lg.AndGate("or1",(2,0))
+    sink = lg.Sink("sink",pos=(3,0))
+
+    g1 = lg.AndGate("and1",pos=(1,0),delay=2)       # gate delay
+    g2 = lg.AndGate("or1",pos=(2,0))
     
-    c1 = lg.Connector(w1,g1)
-    c2 = lg.Connector(w2,g1)
-    c3 = lg.Connector(g1,g2) 
-    c4 = lg.Connector(w2,g2) 
-    c5 = lg.Connector(g2,w3) 
+    c1 = lg.Connector(w1,g1,1)          # wire delay
+    c2 = lg.Connector(w2,g1,2)
+    c3 = lg.Connector(g1,g2,3) 
+    c4 = lg.Connector(w3,g2,4) 
+    c5 = lg.Connector(g2,sink) 
           
     # print "{} {} - {}".format(input_value[i][0], input_value[i][1], w3.getGateOutput())
 
     print "Done-----------------"
 
-    lg.draw_graph()
-    vertex,edge = lg.get_edge_vertex()
+    lg.draw_gate_representation()
+    # vertex,edge = lg.get_edge_vertex()
+    vertex1,edge1 = lg.get_edge_vertex_for_delay_graph()
 
-    print "vertex ----"
-    print vertex
-    print "edge ----"
-    print edge
+    # print "vertex ----"
+    # print vertex
+    # print "edge ----"
+    # print edge
+    # print lg.node_info
+    print "edge delay----"
+    print edge1
 
+    print "vertex delay----"
+    print vertex1
+
+    lg.draw_delay_graph()
 if __name__ == '__main__':
     # check_and()
     # check_or()
