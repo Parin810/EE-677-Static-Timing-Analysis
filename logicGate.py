@@ -215,6 +215,10 @@ class Source(UnaryGate):
         node_list.append(n)
         node_info[n] = [pos,'red']
 
+        ## Connecting all source to a master source node.
+        if (self.getGateLabel()) not in edge_list_for_delay_graph:
+            edge_list_for_delay_graph.append(("SRC",self.getGateLabel(), 0))
+
     def getPin(self):
         if self.pin == None:
             print "Value not Specified"
@@ -276,7 +280,13 @@ def get_edge_vertex ():
     return node_info.keys(),edge_list
 
 def get_edge_vertex_for_delay_graph ():
-    node_list_for_delay_graph = [i[0] for i in edge_list_for_delay_graph]
+    ### Extracting unique vertices from list of edges
+    node_list_for_delay_graph = []
+    ## extract unique vertices at start index for each edge
+    [node_list_for_delay_graph.append(item) for item in [i[0] for i in edge_list_for_delay_graph] if item not in node_list_for_delay_graph]
+    # extract unique vertices at end index for each edge
+    [node_list_for_delay_graph.append(item) for item in [i[1] for i in edge_list_for_delay_graph] if item not in node_list_for_delay_graph]
+
     return node_list_for_delay_graph, edge_list_for_delay_graph
 
 def draw_gate_representation():
