@@ -126,6 +126,7 @@ print "Edges =",Edges
 print "Process Started..."
 print "Total nodes =",len(nodes),"and Total Edges =",Edge
 for i in range (0,Edge):
+        
       #  print(E[i][0]),(E[i][1])
         g.addEdge(Edges[i][0],Edges[i][1])
 print "###########################################################"
@@ -151,9 +152,6 @@ for i in range (0,len(path)):
         
 #print "All Paths are=",Path_Names
 print "All_Path_weight =",All_weight
-
-
-
 
                 
         
