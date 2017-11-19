@@ -27,7 +27,7 @@ class Graph:
                 #global path_no
         def addEdge(self,s,v):
                 self.graph[s].append(v)
-                print self.graph
+                #print self.graph
         def getAllPaths(self, s, d, visited, path):               
                 visited[s]= True
                 path.append(s)                
@@ -39,19 +39,19 @@ class Graph:
                         #print lenghtA, s,d,visited
                 else:
                         self.graph_no +=1
-                        print "value of u =",s
-                        print "self graph no:",self.graph_no,self.graph[s]
+                        #print "value of u =",s
+                        #print "self graph no:",self.graph_no,self.graph[s]
                         for i in self.graph[s]:                               
                                 if visited[i]==False:
                                         self.getAllPaths(i, d, visited, path)             
                 path.pop()
-                print path
+                #print path
                 visited[s]= False           
                 return path_list
         def Paths(self,src, dest):           
                 visited =[False]*(self.N)               
                 path = []
-                print"original path",path
+                #print"original path",path
                 path = self.getAllPaths(src, dest,visited, path)
                 return path
         def getweight(self,A,B,Edges):
@@ -72,47 +72,42 @@ class Graph:
                         
         
 ##########################################################
-weight=0       
-nodes=[0,1,2,3,4]
-Edges=[(0,1,1),(0,3,3),(1,2,4),(1,4,2),(2,3,5),(3,0,7),(4,3,6)]
+weight=0
+All_weight=[]
+
+nodes=[0,1,2,3,4,5,6]
+Edges=[(0,1,1),(0,2,4),(0,3,10),(1,4,2),(2,3,1),(3,5,2),(3,1,5),(3,4,10),(4,5,6),(4,6,3),(5,6,3),(6,0,8),(6,2,9)]
 
 g = Graph(len(nodes))
 Edge=len(Edges)
 
-src =2
-dest=4
+src =0
+dest=6
+print "Given parameters"
+print "Nodes =",nodes
+print "Edges =",Edges
+print "Process Started..."
 print "Total nodes =",len(nodes),"and Total Edges =",Edge
 for i in range (0,Edge):
       #  print(E[i][0]),(E[i][1])
         g.addEdge(Edges[i][0],Edges[i][1])
 print "###########################################################"
-
-print "###########################################################"
-
 path=g.Paths(src, dest)
-
+print "Calculating................"
 print "###########################################################"
+print "Process complated."
 print "All possible path from %d to %d are:"%(src, dest),len(path)
 #print "Total no of path found",len(path)
+print "Lenght of path=",len(path)
 for i in range (0,len(path)):
         if len(path)==0:
                 print "No path found"              
         else:
-                print "Path no %d ="%(i+1), path[i]
+               #print "Path no %d ="%(i+1), path[i]
                # print Edges[0][0],path[0][0]
                 weight=g.calc_weight(Edges,path[i])
-                print "Weight for path %d="%(i+1),weight
+                All_weight.append(weight)              
+                print "Path no %d ="%(i+1), path[i],".....has Weight =",weight
+print "All_weight =",All_weight
                 
-                                
-                                        
-                    
-                   
-                                                
-                                        
-                                       
-                                
-                                
-              
-
-
-
+        
