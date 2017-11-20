@@ -87,14 +87,14 @@ def path_calculculation  (vertex,Edges_in):
     Path_Names=[]
     Path_Dict={}
 
-    print vertex
-    print Edges_in
+    # print vertex
+    # print Edges_in
 
     for i in range (0,len(vertex)):
         nodes.append(i)
-    print "nodes",nodes
+    # print "nodes",nodes
 
-    print "edges_in",Edges_in
+    # print "edges_in",Edges_in
     for i in range (0,len(Edges_in)):
         temp = []
         for j in range (0,3):
@@ -109,7 +109,7 @@ def path_calculculation  (vertex,Edges_in):
                 temp.append(a)
         #print "temp",temp
         Edges.append(tuple(temp))
-    print "Edges =",Edges
+    # print "Edges =",Edges
     #nodes=[0,1,2,3,4,5,6]
     #Edges=[(0,1,1),(0,2,4),(0,3,10),(1,4,2),(2,3,1),(3,5,2),(3,1,5),(3,4,10),(4,5,6),(4,6,3),(5,6,3),(6,0,8),(6,2,9)]
 
@@ -121,21 +121,21 @@ def path_calculculation  (vertex,Edges_in):
 
     src =vertex.index(Source)
     dest=vertex.index(Destination)
-    print "Given parameters"
-    print "Nodes =",nodes
-    print "Edges =",Edges
-    print "Process Started..."
-    print "Total nodes =",len(nodes),"and Total Edges =",Edge
+    # print "Given parameters"
+    # print "Nodes =",nodes
+    # print "Edges =",Edges
+    # print "Process Started..."
+    # print "Total nodes =",len(nodes),"and Total Edges =",Edge
     for i in range (0,Edge):
             
           #  print(E[i][0]),(E[i][1])
             g.addEdge(Edges[i][0],Edges[i][1])
-    print "###########################################################"
+    # print "###########################################################"
     path=g.Paths(src, dest)
-    print "Calculating................"
-    print "###########################################################"
-    print "Process complated."
-    print "All possible path from",Source,"to",Destination,"are",len(path)
+    # print "Calculating................"
+    # print "###########################################################"
+    # print "Process complated."
+    # print "All possible path from",Source,"to",Destination,"are",len(path)
     #print "Total no of path found",len(path)
 
     for i in range (0,len(path)):
@@ -162,7 +162,7 @@ def path_calculculation  (vertex,Edges_in):
             Path_Dict[i]=temp
 
     #print "All Paths are=",Path_Names
-    print "All_Path_weight =",All_weight
+    # print "All_Path_weight =",All_weight
     #print "Path_Dict =",Path_Dict
     return Path_Dict
         
