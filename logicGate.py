@@ -9,6 +9,8 @@ Description:
 - Input to logic gate is provided using source block. One source block per input.
 - Source is connected to gate using connectors
 - Output of logic gate is taken at sink block via connector. One putput per source block.
+- Each gate has a delay asociated with it. 
+- Each gate can be positioned on draw window by specifying (x,y) coordinate in pos argument
 
 '''
 
@@ -20,10 +22,11 @@ node_list = []      # create node
 edge_list = []      # create edges
 node_info = {}      # Store node label, pos and color
 
-node_list_for_delay_graph = []
-edge_list_for_delay_graph = []
+node_list_for_delay_graph = []      ## store list of node for drawing delay graph
+edge_list_for_delay_graph = []      ## store list of set of edges for drawing delay graph
 
 
+## Base Class to get label, output and delay of gate. Other logic gate class inherit from this class
 class LogicGate:
     def __init__(self,n,pos=None, delay=0):
         self.gateLabel = n       # Gate label - specified by user when instantiating the gate
@@ -42,6 +45,7 @@ class LogicGate:
     def getGateDelay(self):
         return self.gatedelay
 
+## Class for two input logic gates
 class BinaryGate(LogicGate):
     def __init__(self,n,in1=None,in2=None,pos=None,delay=0):
         LogicGate.__init__(self,n,pos=None,delay=0)
@@ -49,9 +53,11 @@ class BinaryGate(LogicGate):
         self.pinB = in2 
         # self.delay = delay
         # print "delay ", self.delay
+
+        ## create label for each pin - used in graph
         self.delay = delay
         pin_conn = self.getGateLabel()
-        pin_a = pin_conn + "_A"
+        pin_a = pin_conn + "_A"         
         pin_b = pin_conn + "_B"
         pin_out = pin_conn 
         
@@ -69,6 +75,7 @@ class BinaryGate(LogicGate):
         if (pin_b,pin_out) not in edge_list_for_delay_graph:
             edge_list_for_delay_graph.append((pin_b, pin_out, self.delay))
 
+    ## get value on pin
     def getPinA(self):
         if self.pinA == None:
             print "No Connection Made at Pin A"
@@ -86,6 +93,7 @@ class BinaryGate(LogicGate):
             # print "baba B"
             return self.pinB.getFrom().getGateOutput()
     
+    ## connection to pinA and PinB - via connectors
     def attachWireFromConnector(self,source):
         if self.pinA == None:
             self.pinA = source
@@ -97,7 +105,7 @@ class BinaryGate(LogicGate):
             else:
                print("Cannot Connect: NO EMPTY PINS on this gate")
     
-
+## Class for not gate, source and sink
 class UnaryGate(LogicGate):
     def __init__(self,n,in1=None,pos=None,delay=0):
         LogicGate.__init__(self,n,pos=None,delay=0)
@@ -118,6 +126,7 @@ class UnaryGate(LogicGate):
         if self.pin == None:
             self.pin = source
             return "in"
+
         else:
             print("Cannot Connect: NO EMPTY PINS on this gate")
 
@@ -186,8 +195,8 @@ class XNOrGate(BinaryGate):
             return 1
 
 class NotGate(UnaryGate):
-    def __init__(self,n,pos=None,delay=0):
-        UnaryGate.__init__(self,n,pos,delay)
+    def __init__(self,n,in1=None,pos=None,delay=0):
+        UnaryGate.__init__(self,n,in1,pos,delay)
         node_list.append(n)
         node_info[n] = [pos,'y']
 
@@ -195,10 +204,8 @@ class NotGate(UnaryGate):
         pin_conn = self.getGateLabel()
         pin_a = pin_conn + "_A"
         pin_out = pin_conn 
-        # print "and gate delay", delay, 
+        # print "not" 
 
-        # if (pin_a,pin_out) not in edge_list_for_delay_graph:
-        #     edge_list_for_delay_graph.append((pin_a, pin_out, self.delay))
     def performGateLogic(self):
 
         # return not(self.getPin)
@@ -257,6 +264,7 @@ class Connector:
         self.pin_conn = targetgate.getGateLabel() + "_" +self.togate.attachWireFromConnector(self)
         # print "pin conn - ", self.pin_conn
 
+        ## used for generating nodes and edges for graph
         if self.pin_conn not in node_list_for_delay_graph:
             node_list_for_delay_graph.append(self.pin_conn)
 
@@ -276,9 +284,11 @@ class Connector:
     def getTo(self):
         return self.togate
 
+## get edge list for gate representation
 def get_edge_vertex ():
     return node_info.keys(),edge_list
 
+## get list of edges and vertex which is use to draw graph representation of gate
 def get_edge_vertex_for_delay_graph ():
     ### Extracting unique vertices from list of edges
     node_list_for_delay_graph = []
@@ -289,8 +299,9 @@ def get_edge_vertex_for_delay_graph ():
 
     return node_list_for_delay_graph, edge_list_for_delay_graph
 
+## Draw gate representation
 def draw_gate_representation():
-
+    ## set window title
     fig = plt.figure() 
     fig.canvas.set_window_title('Gate Graph') 
 
@@ -302,12 +313,13 @@ def draw_gate_representation():
     node_list_m = []
     node_list_y = []
 
+    ## Graph object to draw 
     G=nx.Graph()
 
     ## add edges
     G.add_edges_from(edge_list) 
     
-    ## Extract positions of node
+    ## Extract positions of gates
     for keys in node_info.keys():
         fixed_positions[keys] = node_info[keys][0]
 
@@ -335,7 +347,7 @@ def draw_gate_representation():
         if node_info[keys][1] == 'y':
             node_list_y.append(keys)
 
-    ## Place nodes at desired location
+    ## Place gates at desired location
     fixed_nodes = fixed_positions.keys()
     pos = nx.spring_layout(G,pos=fixed_positions, fixed = fixed_nodes)
 
@@ -348,8 +360,9 @@ def draw_gate_representation():
     nx.draw_networkx(G,pos,nodelist=node_list_y,node_color='y')
 
     ## Plot graph
-    plt.show(block=False)
+    plt.show(block=True)
 
+## Draw graph for gate
 def draw_delay_graph():
 
     fig = plt.figure() 

@@ -166,8 +166,8 @@ def check_graph_plot():
 if __name__ == '__main__':
     # check_and()
     # check_or()
-    # check_not()
+    check_not()
     # check_nand()
     # check_nor()
 
-    check_graph_plot()
+    # check_graph_plot()
