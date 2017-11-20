@@ -1,4 +1,7 @@
-import logicGate as lg
+import logicgate as lg
+import allpaths as ap
+
+
 
 def check_and():
     input_value = ([0,0],[0,1],[1,0],[1,1])
@@ -107,6 +110,8 @@ def check_graph_plot():
     lg.draw_gate_representation()
     # vertex,edge = lg.get_edge_vertex()
     vertex1,edge1 = lg.get_edge_vertex_for_delay_graph()
+    Path_Dict=ap.path_calculculation (vertex1,edge1)
+    print "Main Path Dict =",Path_Dict
 
     # print "vertex ----"
     # print vertex
