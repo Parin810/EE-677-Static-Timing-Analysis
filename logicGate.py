@@ -111,9 +111,21 @@ class UnaryGate(LogicGate):
         LogicGate.__init__(self,n,pos=None,delay=0)
         self.pin = in1
 
+        self.delay = delay
+        pin_conn = self.getGateLabel()
+        pin_a = pin_conn + "_in"         
+        pin_out = pin_conn 
         
         # if self.getGateLabel not in node_list_for_delay_graph:
         #     node_list_for_delay_graph.append(self.getGateLabel)
+        if pin_a not in node_list_for_delay_graph:
+            node_list_for_delay_graph.append(pin_a)
+        if pin_out not in node_list_for_delay_graph:
+            node_list_for_delay_graph.append(pin_out)
+
+        ## add edges from gate input to out - 2 edges for both input. Add after checking it is not already in added
+        if (pin_a,pin_out) not in edge_list_for_delay_graph:
+            edge_list_for_delay_graph.append((pin_a, pin_out, self.delay))
     
     def getPin(self):
         if self.pin == None:
@@ -370,10 +382,11 @@ def draw_delay_graph():
     G1=nx.Graph()
     edge_list = []
 
+    # print "edge_list_for_delay_graph",edge_list_for_delay_graph
     for i in range(0,len(edge_list_for_delay_graph)):
         edge_list.append(edge_list_for_delay_graph[i][:2])
 
-    # print "edgle list",edge_list
+    # print "edge list",edge_list
 
     G1.add_edges_from(edge_list) 
     nx.draw(G1,with_labels = True)
